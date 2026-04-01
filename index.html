@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="دارنا">
+<meta name="theme-color" content="#1a3a5c">
+<title>دارنا 🏠</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:'Tajawal',sans-serif;background:#1a3a5c}
+#app{max-width:430px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:#fdf8f2;position:relative;overflow:hidden}
+.page{display:none;flex-direction:column;flex:1;overflow:hidden}.page.active{display:flex}
+/* HEADER */
+.hdr{padding:44px 20px 20px;flex-shrink:0;position:relative;overflow:hidden}
+.hdr.blue{background:linear-gradient(155deg,#1a3a5c,#2563a8 55%,#1b7a78)}
+.hdr.green{background:linear-gradient(155deg,#1b4a35,#2d8a5e 55%,#3db87a)}
+.hdr.gold{background:linear-gradient(155deg,#5a3a0a,#c9963a 55%,#f0c060)}
+.hdr.dark{background:linear-gradient(155deg,#0d1b2a,#1a3a5c 55%,#2563a8)}
+.hdr::before{content:'';position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%),repeating-linear-gradient(-45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:13px 13px}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:relative;z-index:2}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-ico{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(255,255,255,.2)}
+.logo-name{color:#fff;font-size:20px;font-weight:900}.logo-sub{font-size:9px;color:rgba(255,255,255,.6)}
+.hdr h1{color:#fff;font-size:20px;font-weight:900;margin-bottom:4px;position:relative;z-index:2}
+.hdr p{color:rgba(255,255,255,.75);font-size:12px;position:relative;z-index:2}
+.chips{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;position:relative;z-index:2}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:4px 11px;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
+.chip-dot{width:5px;height:5px;border-radius:50%}
+.sync-ico{position:absolute;top:46px;right:20px;font-size:16px;z-index:10;cursor:pointer}
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch}
+.scroll::-webkit-scrollbar{display:none}
+.stitle{font-size:11px;font-weight:800;color:#8a8a9a;text-transform:uppercase;letter-spacing:1px;margin:14px 0 8px}
+/* CARD */
+.card{background:#fff;border-radius:18px;padding:16px;margin-bottom:10px;box-shadow:0 4px 16px rgba(26,58,92,.10)}
+/* ALERT */
+.alert{border-radius:13px;padding:12px;display:flex;gap:9px;margin-bottom:11px}
+.alert.warn{background:linear-gradient(135deg,#fff8ed,#fef3d9);border:1.5px solid #f0c060}
+.alert.info{background:linear-gradient(135deg,#f0f7ff,#e0efff);border:1.5px solid #4a9fd4}
+.alert.danger{background:linear-gradient(135deg,#fff0ed,#ffe0d9);border:1.5px solid #c0613a}
+.alert-ico{font-size:19px;flex-shrink:0}
+.alert p{font-size:12px;color:#1a1a2e;line-height:1.5;font-weight:500}
+.alert-btns{display:flex;gap:7px;margin-top:8px}
+.btn-y{background:#c9963a;color:#fff;border:none;border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer}
+.btn-n{background:transparent;color:#8a8a9a;border:1.5px solid #ddd;border-radius:20px;padding:5px 11px;font-size:11px;font-weight:600;font-family:'Tajawal',sans-serif;cursor:pointer}
+.btn-g{background:#2d8a5e;color:#fff;border:none;border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer}
+/* LIST ITEM */
+.li{background:#fff;border-radius:13px;padding:12px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;box-shadow:0 3px 12px rgba(26,58,92,.09);border:1.5px solid transparent;transition:all .2s}
+.li.done{opacity:.5;background:#f4f9f6;border-color:#c8e6d4}
+.li-check{width:26px;height:26px;border-radius:50%;border:2.5px solid #ccc;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;font-size:13px;transition:all .2s;margin-top:1px}
+.li.done .li-check{background:#2d8a5e;border-color:#2d8a5e;color:#fff}
+.li-emoji{font-size:22px;flex-shrink:0;margin-top:1px}
+.li-info{flex:1;min-width:0}
+.li-name{font-size:14px;font-weight:700;color:#1a1a2e}
+.li-detail{font-size:11px;color:#8a8a9a;margin-top:1px}
+.li-price-row{display:flex;align-items:center;gap:5px;margin-top:5px}
+.li-price-row label{font-size:10px;color:#8a8a9a;font-weight:600}
+.price-in{border:1.5px solid #e0e8f5;border-radius:8px;padding:3px 7px;font-size:12px;font-family:'Tajawal',sans-serif;color:#1a1a2e;font-weight:700;width:65px;text-align:center}
+.opt-badge{font-size:9px;color:#bbb;background:#f5f5f5;padding:2px 6px;border-radius:20px}
+.li-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.qty-row{display:flex;align-items:center;gap:7px}
+.qbtn{width:26px;height:26px;border-radius:50%;border:none;background:#eef2f8;color:#2563a8;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Tajawal',sans-serif}
+.qnum{font-size:14px;font-weight:800;color:#1a1a2e;min-width:20px;text-align:center}
+.del-btn{font-size:13px;color:#ddd;cursor:pointer;border:none;background:none}
+/* BIG BTN */
+.big-btn{background:linear-gradient(135deg,#2563a8,#1b7a78);color:#fff;border:none;border-radius:13px;padding:14px;width:100%;font-size:14px;font-weight:800;font-family:'Tajawal',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 20px rgba(37,99,168,.28);margin-top:8px}
+.big-btn.green{background:linear-gradient(135deg,#2d8a5e,#3db87a);box-shadow:0 6px 20px rgba(45,138,94,.28)}
+.big-btn.gold{background:linear-gradient(135deg,#c9963a,#e8b048);box-shadow:0 6px 20px rgba(201,150,58,.28)}
+/* BOTTOM NAV */
+.bnav{background:#fff;border-top:1px solid #ede8e0;display:flex;justify-content:space-around;padding:8px 0 20px;box-shadow:0 -4px 20px rgba(0,0,0,.06);flex-shrink:0}
+.ni{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 10px;border-radius:12px;border:none;background:transparent;font-family:'Tajawal',sans-serif;position:relative}
+.ni.on{background:#eef2f8}
+.ni-ico{font-size:20px;line-height:1}
+.ni-lbl{font-size:9px;font-weight:700;color:#8a8a9a}
+.ni.on .ni-lbl{color:#2563a8}
+.ni-badge{position:absolute;top:0;right:4px;background:#c0613a;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center}
+/* MODAL */
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end}
+.modal-overlay.hidden{display:none}
+.modal{background:#fff;border-radius:24px 24px 0 0;padding:20px;width:100%;max-height:85%;overflow-y:auto}
+.modal h3{font-size:17px;font-weight:800;color:#1a1a2e;margin-bottom:14px}
+.m-in{width:100%;border:1.5px solid #e0e8f5;border-radius:12px;padding:11px 14px;font-size:15px;font-family:'Tajawal',sans-serif;color:#1a1a2e;margin-bottom:10px}
+.m-in:focus{outline:none;border-color:#2563a8}
+.m-sel{width:100%;border:1.5px solid #e0e8f5;border-radius:12px;padding:11px 14px;font-size:14px;font-family:'Tajawal',sans-serif;color:#1a1a2e;margin-bottom:10px;background:#fff}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.cat-c{background:#f5f5f5;border:1.5px solid transparent;border-radius:10px;padding:8px 4px;text-align:center;cursor:pointer;transition:all .15s}
+.cat-c.sel{background:#eef2f8;border-color:#2563a8}
+.cat-c-ico{font-size:20px;display:block;margin-bottom:2px}
+.cat-c-lbl{font-size:10px;font-weight:700;color:#1a1a2e}
+.m-row{display:flex;gap:8px;margin-bottom:10px}
+.m-row .m-in,.m-row .m-sel{margin-bottom:0;flex:1}
+.cancel-btn{flex:1;background:#f5f5f5;color:#8a8a9a;border:none;border-radius:13px;padding:14px;font-size:14px;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer}
+/* INV */
+.inv-item{background:#fff;border-radius:13px;padding:12px;margin-bottom:8px;box-shadow:0 3px 12px rgba(26,58,92,.09)}
+.inv-top{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.inv-wrap{display:flex;align-items:center;gap:6px;background:#f4f6fc;border-radius:10px;padding:6px 10px;border:1.5px solid #dce6f5;flex:1}
+.inv-num{border:none;background:transparent;font-size:16px;font-weight:800;font-family:'Tajawal',sans-serif;color:#1a1a2e;width:52px;text-align:center}
+.inv-unit-s{border:none;background:transparent;font-size:12px;color:#2563a8;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer}
+.inv-bar{height:6px;background:#eee;border-radius:10px;overflow:hidden;margin-top:7px}
+.inv-bar-f{height:100%;border-radius:10px;transition:width .4s}
+.add-mini{background:transparent;border:1.5px solid #2563a8;color:#2563a8;border-radius:20px;padding:5px 11px;font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;cursor:pointer;white-space:nowrap}
+/* THRESHOLD */
+.threshold-row{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #f0ebe3}
+.threshold-row label{font-size:11px;color:#8a8a9a;font-weight:600;flex-shrink:0}
+.thr-in{border:1.5px solid #e0e8f5;border-radius:8px;padding:4px 8px;font-size:12px;font-family:'Tajawal',sans-serif;color:#1a1a2e;font-weight:700;width:60px;text-align:center}
+.thr-unit{font-size:11px;color:#2563a8;font-weight:700}
+/* BUDGET */
+.b-bar{height:10px;background:#eee;border-radius:10px;overflow:hidden;margin:8px 0}
+.b-fill{height:100%;border-radius:10px;transition:width .5s}
+.b-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
+.bstat{background:#f8f9fc;border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #e8ecf5}
+.bstat-v{font-size:16px;font-weight:900;display:block}
+.bstat-l{font-size:10px;color:#8a8a9a;font-weight:600}
+/* SHARE */
+.url-box{background:#f4f6fc;border:1.5px solid #dce6f5;border-radius:12px;padding:12px;margin-bottom:10px;word-break:break-all;font-size:12px;color:#2563a8;font-weight:600;line-height:1.5}
+/* NOTIF PANEL */
+.notif-log-item{display:flex;gap:10px;padding:10px 12px;background:#fff;border-radius:13px;margin-bottom:7px;box-shadow:0 2px 8px rgba(26,58,92,.08);align-items:flex-start;border-right:3px solid #2563a8}
+.notif-log-item.new{border-color:#c0613a;background:#fff8f6}
+.remind-chip{background:#f5f5f5;border:2px solid transparent;border-radius:13px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .18s}
+.remind-chip.sel{background:#eef2f8;border-color:#2563a8}
+.remind-chip:active{transform:scale(.96)}
+.notif-msg{font-size:12.5px;color:#1a1a2e;font-weight:500;line-height:1.4}
+.notif-time{font-size:10px;color:#8a8a9a;margin-top:3px}
+/* TOAST */
+#toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#1a3a5c;color:#fff;padding:10px 20px;border-radius:30px;font-size:13px;font-weight:700;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.3);opacity:0;transition:opacity .3s;font-family:'Tajawal',sans-serif;white-space:nowrap;pointer-events:none;max-width:90%}
+/* ONBOARD */
+.ob{display:flex;flex-direction:column;flex:1;background:linear-gradient(160deg,#1a3a5c,#1b7a78);padding:24px}
+.ob-dots{display:flex;gap:6px;margin-bottom:24px;padding-top:24px}
+.ob-dot{height:4px;flex:1;background:rgba(255,255,255,.25);border-radius:10px;transition:background .3s}
+.ob-dot.done{background:#fff}
+.ob-ico{font-size:48px;text-align:center;margin-bottom:14px}
+.ob-q{color:#fff;font-size:19px;font-weight:900;line-height:1.3;margin-bottom:6px}
+.ob-sub{color:rgba(255,255,255,.7);font-size:12px;line-height:1.5;margin-bottom:20px}
+.ob-opts{display:flex;flex-direction:column;gap:9px}
+.ob-opt{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:13px;padding:13px 15px;cursor:pointer;display:flex;align-items:center;gap:11px;transition:all .2s}
+.ob-opt.sel{background:rgba(255,255,255,.22);border-color:#fff}
+.ob-opt-ico{font-size:22px}
+.ob-opt-title{color:#fff;font-size:13px;font-weight:700}
+.ob-opt-desc{color:rgba(255,255,255,.6);font-size:10px;margin-top:1px}
+.ob-chk{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex-shrink:0;margin-right:auto}
+.ob-opt.sel .ob-chk{background:#fff;color:#1a3a5c;border-color:#fff}
+.ob-next{background:#fff;color:#1a3a5c;border:none;border-radius:13px;padding:14px;font-size:14px;font-weight:900;font-family:'Tajawal',sans-serif;cursor:pointer;width:100%;margin-top:16px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.ob-notif{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px;margin-top:12px}
+.ob-notif-lbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ob-notif-txt{background:rgba(255,255,255,.15);border-radius:9px;padding:9px 11px;font-size:12px;color:#fff;font-weight:500;line-height:1.5}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.lang-opt{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:13px;padding:13px;cursor:pointer;text-align:center;transition:all .2s}
+.lang-opt.sel{background:rgba(255,255,255,.22);border-color:#fff}
+.lang-flag{font-size:24px;margin-bottom:4px}
+.lang-name{color:#fff;font-size:12px;font-weight:700}
+.notif-perm-banner{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:13px;padding:13px;margin-top:12px;display:flex;gap:10px;align-items:center}
+.notif-perm-banner p{color:rgba(255,255,255,.9);font-size:12px;font-weight:600;flex:1;line-height:1.4}
+.perm-btn{background:#fff;color:#1a3a5c;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;font-family:'Tajawal',sans-serif;cursor:pointer;white-space:nowrap}
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:#8a8a9a}
+.empty-ico{font-size:48px;margin-bottom:12px}
+.empty p{font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="toast"></div>
+
+<!-- ===== ONBOARDING ===== -->
+
+<div class="page active" id="page-ob">
+  <div class="ob" id="ob1">
+    <div class="ob-dots"><div class="ob-dot done"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-ico">🏠</div>
+    <div class="ob-q">مرحباً بك في دارنا!</div>
+    <div class="ob-sub">شكون غادي تتشارك معاه التطبيق؟</div>
+    <div class="ob-opts">
+      <div class="ob-opt sel" data-val="couple" onclick="selOb(this,'rel')">
+        <div class="ob-opt-ico">💑</div><div><div class="ob-opt-title">زوجين</div><div class="ob-opt-desc">إشعارات بلغة دافئة</div></div><div class="ob-chk">✓</div>
+      </div>
+      <div class="ob-opt" data-val="family" onclick="selOb(this,'rel')">
+        <div class="ob-opt-ico">👨‍👩‍👧‍👦</div><div><div class="ob-opt-title">عائلة</div><div class="ob-opt-desc">إشعارات عائلية</div></div><div class="ob-chk"></div>
+      </div>
+      <div class="ob-opt" data-val="friends" onclick="selOb(this,'rel')">
+        <div class="ob-opt-ico">🤝</div><div><div class="ob-opt-title">أصدقاء</div><div class="ob-opt-desc">إشعارات كاجوال</div></div><div class="ob-chk"></div>
+      </div>
+    </div>
+    <div class="ob-notif"><div class="ob-notif-lbl">👀 مثال الإشعار</div><div class="ob-notif-txt" id="ob-notif-txt">💕 را جبت البطاطا ا حبيبة!</div></div>
+    <button class="ob-next" onclick="goOb(2)">التالي ←</button>
+  </div>
+  <div class="ob" id="ob2" style="display:none">
+    <div class="ob-dots"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot"></div></div>
+    <div class="ob-ico">🌍</div>
+    <div class="ob-q">أشمن لغة تحب؟</div>
+    <div class="ob-sub">ممكن تبدلها من الإعدادات</div>
+    <div class="lang-grid">
+      <div class="lang-opt sel" data-val="ar" onclick="selLang(this)"><div class="lang-flag">🇲🇦</div><div class="lang-name">الدارجة</div></div>
+      <div class="lang-opt" data-val="fr" onclick="selLang(this)"><div class="lang-flag">🇫🇷</div><div class="lang-name">Français</div></div>
+      <div class="lang-opt" data-val="en" onclick="selLang(this)"><div class="lang-flag">🇬🇧</div><div class="lang-name">English</div></div>
+      <div class="lang-opt" data-val="ber" onclick="selLang(this)"><div class="lang-flag">🏔️</div><div class="lang-name">ⵜⴰⵎⴰⵣⵉⵖⵜ</div></div>
+    </div>
+    <div class="notif-perm-banner">
+      <div>🔔</div>
+      <p>فعّل الإشعارات باش يوصلك خبر فاش صاحبك يزيد منتوج أو يشريه!</p>
+      <button class="perm-btn" onclick="reqNotifPerm()">فعّل</button>
+    </div>
+    <button class="ob-next" onclick="goOb(3)" style="margin-top:12px">التالي ←</button>
+  </div>
+  <div class="ob" id="ob3" style="display:none">
+    <div class="ob-dots"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot done"></div></div>
+    <div class="ob-ico">💰</div>
+    <div class="ob-q">ميزانية المشتريات الشهرية؟</div>
+    <div class="ob-sub">اختياري — باش نوريك شحال خسرتو</div>
+    <div style="background:rgba(255,255,255,.1);border-radius:14px;padding:20px;margin-bottom:12px">
+      <div style="color:rgba(255,255,255,.7);font-size:12px;margin-bottom:8px">الميزانية الشهرية</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input id="ob-budget" type="number" placeholder="1000" style="flex:1;border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:12px;font-size:20px;font-weight:900;font-family:Tajawal,sans-serif;background:rgba(255,255,255,.15);color:#fff;text-align:center">
+        <span style="color:#fff;font-size:16px;font-weight:700">درهم</span>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:12px">
+      <div style="color:rgba(255,255,255,.85);font-size:13px;font-weight:700;margin-bottom:4px">👤 اسمك في التطبيق</div>
+      <div style="color:rgba(255,255,255,.6);font-size:11px;margin-bottom:8px">غيظهر لصاحبك فاش تزيد أو تشري</div>
+      <input id="ob-name" type="text" placeholder="مثلاً: مصطفى" style="width:100%;border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:12px;font-size:16px;font-weight:700;font-family:Tajawal,sans-serif;background:rgba(255,255,255,.15);color:#fff">
+    </div>
+    <button class="ob-next" style="background:linear-gradient(135deg,#2d8a5e,#3db87a);color:#fff" onclick="finishOb()">ابدأ الاستخدام 🚀</button>
+  </div>
+</div>
+
+<!-- ===== HOME ===== -->
+
+<div class="page" id="page-home">
+  <div class="hdr blue">
+    <span class="sync-ico" id="sync-ico" title="حالة المزامنة">🔄</span>
+    <div class="hdr-top">
+      <div class="logo"><div class="logo-ico">🏠</div><div><div class="logo-name">دارنا</div><div class="logo-sub">DARNA</div></div></div>
+      <button onclick="navTo('notifs')" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 12px;color:#fff;font-size:12px;font-weight:700;font-family:Tajawal,sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px">🔔 <span id="notif-count-badge" style="background:#c0613a;border-radius:20px;padding:1px 6px;font-size:10px;display:none">0</span></button>
+    </div>
+    <h1>شنو ناقص فالدار؟ 🛒</h1>
+    <p id="home-sub">لائحة مشتريات مشتركة</p>
+    <div class="chips">
+      <div class="chip"><div class="chip-dot" style="background:#ff8a65"></div><span id="chip-count">0 منتجات</span></div>
+      <div class="chip"><div class="chip-dot" style="background:#a8f0c0"></div><span id="chip-budget">...</span></div>
+    </div>
+  </div>
+  <div class="scroll">
+    <div id="home-alerts"></div>
+    <div class="stitle">لائحة المشتريات</div>
+    <div id="list-items"></div>
+    <div id="list-empty" class="empty"><div class="empty-ico">🛒</div><p>اللائحة فارغة<br>اضغط + باش تزيد منتوج</p></div>
+    <button class="big-btn" onclick="openAdd()">＋ إضافة منتوج</button>
+    <div style="height:12px"></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni on" onclick="navTo('home')"><div class="ni-ico">🏠</div><div class="ni-lbl">الرئيسية</div></button>
+    <button class="ni" onclick="navTo('inv')"><div class="ni-ico">📦</div><div class="ni-lbl">المخزون</div></button>
+    <button class="ni" onclick="navTo('budget')"><div class="ni-ico">💰</div><div class="ni-lbl">الميزانية</div></button>
+    <button class="ni" onclick="navTo('share')"><div class="ni-ico">👥</div><div class="ni-lbl">الدار</div></button>
+  </nav>
+</div>
+
+<!-- ===== INVENTORY ===== -->
+
+<div class="page" id="page-inv">
+  <div class="hdr green">
+    <div class="hdr-top" style="padding-top:4px">
+      <div class="logo"><div class="logo-ico">📦</div><div><div class="logo-name">المخزون</div><div class="logo-sub">STOCK</div></div></div>
+      <button onclick="saveInv()" style="background:rgba(255,255,255,.2);border:none;border-radius:20px;padding:6px 14px;color:#fff;font-size:12px;font-weight:700;font-family:Tajawal,sans-serif;cursor:pointer">💾 حفظ</button>
+    </div>
+    <h1>شحال باقي فالدار؟ 🏡</h1>
+    <p>دخل الكميات — الكل يشوف في الوقت الحقيقي</p>
+    <div class="chips">
+      <div class="chip"><div class="chip-dot" style="background:#ff8a65"></div><span id="inv-low-chip">0 ناقصين</span></div>
+      <div class="chip"><div class="chip-dot" style="background:#a8f0c0"></div><span id="inv-ok-chip">0 متوفرين</span></div>
+    </div>
+  </div>
+  <div class="scroll">
+    <div id="inv-alerts"></div>
+    <div id="inv-low-sec"></div>
+    <div id="inv-ok-sec"></div>
+    <button class="big-btn green" onclick="openAddInv()">＋ إضافة منتوج للمخزون</button>
+    <div style="height:12px"></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni" onclick="navTo('home')"><div class="ni-ico">🏠</div><div class="ni-lbl">الرئيسية</div></button>
+    <button class="ni on" onclick="navTo('inv')"><div class="ni-ico">📦</div><div class="ni-lbl">المخزون</div></button>
+    <button class="ni" onclick="navTo('budget')"><div class="ni-ico">💰</div><div class="ni-lbl">الميزانية</div></button>
+    <button class="ni" onclick="navTo('share')"><div class="ni-ico">👥</div><div class="ni-lbl">الدار</div></button>
+  </nav>
+</div>
+
+<!-- ===== BUDGET ===== -->
+
+<div class="page" id="page-budget">
+  <div class="hdr gold">
+    <div class="hdr-top" style="padding-top:4px">
+      <div class="logo"><div class="logo-ico">💰</div><div><div class="logo-name">الميزانية</div><div class="logo-sub">BUDGET</div></div></div>
+    </div>
+    <h1>شحال خسرتو؟ 💸</h1>
+    <p>تتبع مصاريف المنزل</p>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:800;color:#1a1a2e">📊 ملخص الشهر</span>
+        <span style="font-size:11px;color:#8a8a9a" id="b-month"></span>
+      </div>
+      <div class="b-bar"><div class="b-fill" id="b-bar" style="background:linear-gradient(90deg,#2d8a5e,#4fc38a)"></div></div>
+      <div class="b-grid">
+        <div class="bstat"><span class="bstat-v" id="b-spent" style="color:#c0613a">0</span><span class="bstat-l">مصروف</span></div>
+        <div class="bstat"><span class="bstat-v" id="b-left" style="color:#2d8a5e">0</span><span class="bstat-l">باقي</span></div>
+        <div class="bstat"><span class="bstat-v" id="b-total" style="color:#2563a8">0</span><span class="bstat-l">الميزانية</span></div>
+      </div>
+    </div>
+    <div class="stitle">آخر المشتريات</div>
+    <div id="recent-list"></div>
+    <div class="stitle">⚙️ ضبط الميزانية</div>
+    <div class="card" style="display:flex;align-items:center;gap:12px">
+      <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#1a1a2e">ميزانية الشهر</div><div style="font-size:11px;color:#8a8a9a">يتجدد كل شهر</div></div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <input type="number" id="budget-in" style="border:1.5px solid #e0e8f5;border-radius:10px;padding:8px 10px;font-size:18px;font-family:Tajawal,sans-serif;font-weight:900;color:#1a1a2e;width:90px;text-align:center" onchange="saveBudget()">
+        <span style="font-size:12px;font-weight:700;color:#2d8a5e">درهم</span>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni" onclick="navTo('home')"><div class="ni-ico">🏠</div><div class="ni-lbl">الرئيسية</div></button>
+    <button class="ni" onclick="navTo('inv')"><div class="ni-ico">📦</div><div class="ni-lbl">المخزون</div></button>
+    <button class="ni on" onclick="navTo('budget')"><div class="ni-ico">💰</div><div class="ni-lbl">الميزانية</div></button>
+    <button class="ni" onclick="navTo('share')"><div class="ni-ico">👥</div><div class="ni-lbl">الدار</div></button>
+  </nav>
+</div>
+
+<!-- ===== SHARE ===== -->
+
+<div class="page" id="page-share">
+  <div class="hdr dark">
+    <div class="hdr-top" style="padding-top:4px">
+      <div class="logo"><div class="logo-ico">👥</div><div><div class="logo-name">الدار</div><div class="logo-sub">SHARE</div></div></div>
+    </div>
+    <h1>كلنا معاً 🤝</h1>
+    <p>شارك التطبيق مع أهل الدار</p>
+  </div>
+  <div class="scroll">
+    <div class="stitle">رابط الدار</div>
+    <div class="card">
+      <p style="font-size:12px;color:#8a8a9a;margin-bottom:10px">أرسل هاد الرابط — كل واحد يشوف نفس اللائحة فوراً</p>
+      <div class="url-box" id="share-url-el">جاري التوليد...</div>
+      <div style="display:flex;gap:8px">
+        <button class="big-btn" style="margin:0;flex:1;padding:12px;font-size:13px" onclick="copyUrl()">📋 نسخ الرابط</button>
+        <button style="flex:1;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;border:none;border-radius:13px;padding:13px;font-size:13px;font-weight:800;font-family:Tajawal,sans-serif;cursor:pointer" onclick="shareWA()">💬 واتساب</button>
+      </div>
+    </div>
+    <div class="stitle">🔔 الإشعارات</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div><div style="font-size:13px;font-weight:700;color:#1a1a2e">إشعارات التطبيق</div><div style="font-size:11px;color:#8a8a9a" id="notif-status-txt">غير مفعلة</div></div>
+        <button onclick="reqNotifPerm()" id="notif-perm-btn" style="background:#2563a8;color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;font-family:Tajawal,sans-serif;cursor:pointer">فعّل 🔔</button>
+      </div>
+      <div style="background:#f8f9fc;border-radius:10px;padding:10px 12px;font-size:11px;color:#8a8a9a;line-height:1.6">
+        غتوصلك إشعار فاش:<br>
+        • صاحبك يزيد منتوج للائحة<br>
+        • صاحبك يشري ويعلم ✔<br>
+        • منتوج في المخزون قرب يسالى
+      </div>
+    </div>
+    <div class="stitle">⚙️ إعدادات</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f0e8">
+        <div><div style="font-size:13px;font-weight:700;color:#1a1a2e">اسمك</div><div style="font-size:11px;color:#8a8a9a" id="name-display">—</div></div>
+        <button onclick="editName()" style="background:#f0f4fc;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:#2563a8;font-family:Tajawal,sans-serif;cursor:pointer">تغيير</button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f0e8">
+        <div><div style="font-size:13px;font-weight:700;color:#1a1a2e">نوع القرابة</div><div style="font-size:11px;color:#8a8a9a" id="rel-lbl">زوجين</div></div>
+        <div style="font-size:18px">💑</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+        <div><div style="font-size:13px;font-weight:700;color:#1a1a2e">حذف البيانات</div><div style="font-size:11px;color:#8a8a9a">بدء من جديد</div></div>
+        <button onclick="resetApp()" style="background:#c0613a;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;font-family:Tajawal,sans-serif;cursor:pointer">حذف</button>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni" onclick="navTo('home')"><div class="ni-ico">🏠</div><div class="ni-lbl">الرئيسية</div></button>
+    <button class="ni" onclick="navTo('inv')"><div class="ni-ico">📦</div><div class="ni-lbl">المخزون</div></button>
+    <button class="ni" onclick="navTo('budget')"><div class="ni-ico">💰</div><div class="ni-lbl">الميزانية</div></button>
+    <button class="ni on" onclick="navTo('share')"><div class="ni-ico">👥</div><div class="ni-lbl">الدار</div></button>
+  </nav>
+</div>
+
+<!-- ===== NOTIFICATIONS LOG ===== -->
+
+<div class="page" id="page-notifs">
+  <div class="hdr dark">
+    <div class="hdr-top" style="padding-top:4px">
+      <div class="logo"><div class="logo-ico">🔔</div><div><div class="logo-name">الإشعارات</div><div class="logo-sub">NOTIFICATIONS</div></div></div>
+      <button onclick="clearNotifs()" style="background:rgba(255,255,255,.15);border:none;border-radius:20px;padding:5px 12px;color:#fff;font-size:11px;font-weight:700;font-family:Tajawal,sans-serif;cursor:pointer">مسح الكل</button>
+    </div>
+    <h1>الإشعارات 🔔</h1>
+    <p>كل ما صار في الدار</p>
+  </div>
+  <div class="scroll">
+    <div id="notifs-list"></div>
+    <div id="notifs-empty" class="empty"><div class="empty-ico">🔔</div><p>لا توجد إشعارات بعد</p></div>
+    <div style="height:12px"></div>
+  </div>
+  <nav class="bnav">
+    <button class="ni" onclick="navTo('home')"><div class="ni-ico">🏠</div><div class="ni-lbl">الرئيسية</div></button>
+    <button class="ni" onclick="navTo('inv')"><div class="ni-ico">📦</div><div class="ni-lbl">المخزون</div></button>
+    <button class="ni" onclick="navTo('budget')"><div class="ni-ico">💰</div><div class="ni-lbl">الميزانية</div></button>
+    <button class="ni" onclick="navTo('share')"><div class="ni-ico">👥</div><div class="ni-lbl">الدار</div></button>
+  </nav>
+</div>
+
+<!-- MODAL ADD ITEM -->
+
+<div class="modal-overlay hidden" id="m-add">
+  <div class="modal">
+    <h3>➕ إضافة منتوج</h3>
+    <div class="stitle" style="margin-top:0">الفئة</div>
+    <div class="cat-grid" id="cat-picker"></div>
+    <input class="m-in" id="a-name" placeholder="اسم المنتوج" type="text">
+    <div class="m-row">
+      <input class="m-in" id="a-qty" placeholder="الكمية" type="number" min="0.1" step="0.1">
+      <select class="m-sel" id="a-unit">
+        <option>كيلو</option><option>غرام</option><option>لتر</option>
+        <option>قطعة</option><option>علبة</option><option>قنينة</option><option>كيس</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <input class="m-in" id="a-price" placeholder="الثمن (اختياري)" type="number" style="flex:1;margin-bottom:0">
+      <span style="font-size:13px;color:#2d8a5e;font-weight:700">درهم</span>
+      <span class="opt-badge">اختياري</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="big-btn" onclick="addItem()" style="margin:0;flex:1">إضافة ✓</button>
+      <button class="cancel-btn" onclick="closeM('m-add')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD INVENTORY -->
+
+<div class="modal-overlay hidden" id="m-inv">
+  <div class="modal">
+    <h3>📦 إضافة للمخزون</h3>
+    <input class="m-in" id="i-name" placeholder="اسم المنتوج (مثل: بطاطا)" type="text">
+    <div class="m-row">
+      <input class="m-in" id="i-now" placeholder="الكمية الحالية" type="number" min="0" step="0.5">
+      <input class="m-in" id="i-max" placeholder="الكمية القصوى" type="number" min="0" step="0.5">
+    </div>
+    <select class="m-sel" id="i-unit">
+      <option>كيلو</option><option>غرام</option><option>لتر</option>
+      <option>قطعة</option><option>علبة</option><option>قنينة</option>
+    </select>
+    <div style="background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;color:#2563a8;margin-bottom:8px">⚠️ حد التنبيه</div>
+      <div style="font-size:11px;color:#8a8a9a;margin-bottom:8px">فاش يوصل المخزون لهاد الكمية، غيرسل ليك إشعار</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input class="m-in" id="i-threshold" placeholder="مثل: 1" type="number" min="0" step="0.5" style="flex:1;margin-bottom:0">
+        <span style="font-size:12px;color:#2563a8;font-weight:700">نفس الوحدة</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="big-btn green" onclick="addInvItem()" style="margin:0;flex:1">إضافة ✓</button>
+      <button class="cancel-btn" onclick="closeM('m-inv')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: POST-BUY SMART DIALOG -->
+
+<div class="modal-overlay hidden" id="m-ask-inv">
+  <div class="modal" style="padding-bottom:24px">
+
+```
+<!-- Step 1: Reminder timing -->
+<div id="ask-step1">
+  <div style="text-align:center;font-size:48px;margin-bottom:6px" id="ask-inv-emoji">📦</div>
+  <h3 style="text-align:center;margin-bottom:4px" id="ask-inv-title">شريتي!</h3>
+  <p style="font-size:12px;color:#8a8a9a;text-align:center;margin-bottom:18px;line-height:1.5" id="ask-inv-sub">فاش تبغي نفكرك تشري هاد المنتوج من جديد؟</p>
+
+  <!-- Reminder chips -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px" id="remind-chips">
+    <div class="remind-chip" data-days="1" onclick="selRemind(this,1)">
+      <div style="font-size:20px">📅</div>
+      <div style="font-size:13px;font-weight:800;color:#1a1a2e">غدا</div>
+      <div style="font-size:10px;color:#8a8a9a">يوم واحد</div>
+    </div>
+    <div class="remind-chip" data-days="3" onclick="selRemind(this,3)">
+      <div style="font-size:20px">📆</div>
+      <div style="font-size:13px;font-weight:800;color:#1a1a2e">3 أيام</div>
+      <div style="font-size:10px;color:#8a8a9a">بعد 3 أيام</div>
+    </div>
+    <div class="remind-chip sel" data-days="7" onclick="selRemind(this,7)">
+      <div style="font-size:20px">🗓️</div>
+      <div style="font-size:13px;font-weight:800;color:#1a1a2e">أسبوع</div>
+      <div style="font-size:10px;color:#8a8a9a">7 أيام</div>
+    </div>
+    <div class="remind-chip" data-days="14" onclick="selRemind(this,14)">
+      <div style="font-size:20px">📋</div>
+      <div style="font-size:13px;font-weight:800;color:#1a1a2e">2 أسابيع</div>
+      <div style="font-size:10px;color:#8a8a9a">14 يوم</div>
+    </div>
+    <div class="remind-chip" data-days="30" onclick="selRemind(this,30)">
+      <div style="font-size:20px">🗃️</div>
+      <div style="font-size:13px;font-weight:800;color:#1a1a2e">شهر</div>
+      <div style="font-size:10px;color:#8a8a9a">30 يوم</div>
+    </div>
+    <div class="remind-chip" data-days="0" onclick="selRemind(this,0)">
+      <div style="font-size:20px">🚫</div>
+      <div style="font-size:13px;font-weight:800;color:#8a8a9a">بلا</div>
+      <div style="font-size:10px;color:#8a8a9a">ما نفكركش</div>
+    </div>
+  </div>
+
+  <div style="background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:14px;display:flex;align-items:center;gap:10px" id="remind-preview">
+    <div style="font-size:22px">🔔</div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#1a1a2e" id="remind-preview-title">غيوصلك تذكير بعد أسبوع</div>
+      <div style="font-size:11px;color:#8a8a9a" id="remind-preview-date"></div>
+    </div>
+  </div>
+
+  <button class="big-btn" onclick="goAskStep2()" style="margin:0;margin-bottom:8px">التالي — إضافة للمخزون ←</button>
+  <button onclick="closeM('m-ask-inv')" style="width:100%;background:transparent;border:none;color:#8a8a9a;font-size:13px;font-weight:600;font-family:Tajawal,sans-serif;cursor:pointer;padding:8px">تخطى</button>
+</div>
+
+<!-- Step 2: Add to inventory -->
+<div id="ask-step2" style="display:none">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <button onclick="goAskStep1()" style="background:#f5f5f5;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+    <h3 style="margin:0">📦 زيد للمخزون</h3>
+  </div>
+  <p style="font-size:12px;color:#8a8a9a;margin-bottom:14px;line-height:1.5">هاد المعلومات غتساعد التطبيق يرسل لك تنبيه فاش يقرب يسالى</p>
+  <div class="m-row" style="margin-bottom:10px">
+    <div style="flex:1">
+      <div style="font-size:10px;color:#8a8a9a;margin-bottom:4px;font-weight:600">الكمية المشراة</div>
+      <input class="m-in" id="ask-qty-now" type="number" min="0" step="0.5" style="margin-bottom:0;font-size:16px;font-weight:800">
+    </div>
+    <div style="flex:1">
+      <div style="font-size:10px;color:#8a8a9a;margin-bottom:4px;font-weight:600">الكمية القصوى</div>
+      <input class="m-in" id="ask-qty-max" type="number" min="0" step="0.5" style="margin-bottom:0;font-size:16px;font-weight:800">
+    </div>
+  </div>
+  <div style="margin-bottom:10px">
+    <div style="font-size:10px;color:#8a8a9a;margin-bottom:4px;font-weight:600">الوحدة</div>
+    <select class="m-sel" id="ask-unit" style="margin-bottom:0">
+      <option>كيلو</option><option>غرام</option><option>لتر</option>
+      <option>قطعة</option><option>علبة</option><option>قنينة</option>
+    </select>
+  </div>
+  <div style="background:#fff8ed;border:1.5px solid #f0c060;border-radius:12px;padding:12px;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:700;color:#c9963a;margin-bottom:6px">⚠️ حد التنبيه</div>
+    <div style="font-size:11px;color:#8a8a9a;margin-bottom:8px">فاش يوصل المخزون لهاد الكمية غيرسل ليك إشعار</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <input class="m-in" id="ask-threshold" type="number" min="0" step="0.5" placeholder="مثل: 1" style="flex:1;margin-bottom:0">
+      <span id="ask-thr-unit" style="font-size:12px;color:#2563a8;font-weight:700">كيلو</span>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="big-btn green" onclick="confirmAddToInv()" style="margin:0;flex:1">✅ حفظ</button>
+    <button class="cancel-btn" onclick="closeM('m-ask-inv')" style="flex:1">تخطى</button>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+// ========== FIREBASE CONFIG ==========
+const FB_CFG = {
+  apiKey:"AIzaSyBg0EFwWsWxh5801VL4OwRQC14uxa_sq-E",
+  authDomain:"darna-319c5.firebaseapp.com",
+  projectId:"darna-319c5",
+  storageBucket:"darna-319c5.firebasestorage.app",
+  messagingSenderId:"139930762664",
+  appId:"1:139930762664:web:03e419839f7a46ce1db19d"
+};
+
+// ========== CONSTANTS ==========
+const CATS=[
+  {id:'veg',n:'خضر',e:'🥦'},{id:'fruit',n:'فواكه',e:'🍊'},
+  {id:'dairy',n:'حليب',e:'🥛'},{id:'meat',n:'لحم',e:'🥩'},
+  {id:'bread',n:'خبز',e:'🍞'},{id:'basic',n:'أساسيات',e:'🧴'},
+  {id:'clean',n:'نظافة',e:'🧹'},{id:'other',n:'أخرى',e:'📦'}
+];
+const NOTIF_MSGS = {
+  couple:{add:'💕 {who} زاد {item} للائحة ا حبيبة!',buy:'💕 {who} اشرا {item}، ✔ شكراً!',low:'⚠️ {item} قرب يسالى في المخزون ا حبيبة!'},
+  family:{add:'🏡 {who} زاد {item} للائحة',buy:'✅ {who} اشرا {item}',low:'⚠️ {item} قرب يسالى في المخزون، واش شي واحد يجيبو؟'},
+  friends:{add:'👊 {who} زاد {item} للائحة صطوف!',buy:'👍 {who} جاب {item}',low:'⚠️ {item} قرب يخلص في الدار!'}
+};
+const MONTHS=['يناير','فبراير','مارس','أبريل','ماي','يونيو','يوليوز','غشت','شتنبر','أكتوبر','نونبر','دجنبر'];
+
+// ========== STATE ==========
+let S = {
+  onboarded:false, rel:'couple', lang:'ar', budget:1000,
+  userName:'أنا', items:[], inventory:[], notifications:[]
+};
+let homeId=null, db=null, unsub=null, selCat='veg', lastSave=0;
+let unreadNotifs=0;
+
+// ========== PERSIST ==========
+function loadS(){try{const s=localStorage.getItem('darna3');if(s)S={...S,...JSON.parse(s)};}catch(e){}}
+function saveS(){
+  lastSave=Date.now();
+  try{localStorage.setItem('darna3',JSON.stringify(S));}catch(e){}
+  fbSave();
+}
+
+// ========== HOME ID ==========
+function initHomeId(){
+  const p=new URLSearchParams(location.search);
+  const u=p.get('home');
+  if(u){homeId=u;localStorage.setItem('darna-hid',u);history.replaceState({},'',location.pathname);return;}
+  let h=localStorage.getItem('darna-hid');
+  if(!h){h='h-'+Math.random().toString(36).substr(2,9);localStorage.setItem('darna-hid',h);}
+  homeId=h;
+}
+
+// ========== FIREBASE ==========
+function fbLoad(){
+  return new Promise((ok,fail)=>{
+    if(window._fbDb){db=window._fbDb;ok();return;}
+    let n=0;
+    function onLoad(){if(++n<2)return;
+      try{
+        try{firebase.initializeApp(FB_CFG);}catch(e){}
+        db=firebase.firestore();window._fbDb=db;ok();
+      }catch(e){fail(e);}
+    }
+    function addSc(src){const s=document.createElement('script');s.src=src;s.onload=onLoad;s.onerror=onLoad;document.head.appendChild(s);}
+    addSc('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
+    addSc('https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js');
+  });
+}
+
+function fbSave(){
+  if(!db||!homeId)return;
+  setSync('🔄');
+  db.collection('homes').doc(homeId).set({
+    items:S.items, inventory:S.inventory, budget:S.budget,
+    rel:S.rel, lang:S.lang, userName:S.userName,
+    updatedAt:Date.now(), updatedBy:S.userName
+  }).then(()=>setSync('☁️')).catch(()=>setSync('📴'));
+}
+
+function fbListen(){
+  if(!db||!homeId)return;
+  if(unsub)unsub();
+  unsub=db.collection('homes').doc(homeId).onSnapshot(snap=>{
+    if(!snap||!snap.exists)return;
+    const d=snap.data();
+    if(!d)return;
+    const isRemote=d.updatedAt&&d.updatedAt>lastSave+1500;
+    if(isRemote){
+      const oldItems=S.items.map(i=>i.id);
+      const oldDone=S.items.filter(i=>i.done).map(i=>i.id);
+
+      S.items=d.items||S.items;
+      S.inventory=d.inventory||S.inventory;
+      S.budget=d.budget||S.budget;
+      const who=d.updatedBy||'صاحبك';
+
+      // Detect what changed and create notification
+      const newItems=d.items||[];
+      const newDone=newItems.filter(i=>i.done).map(i=>i.id);
+      // New item added
+      newItems.filter(i=>!oldItems.includes(i.id)).forEach(i=>{
+        addNotif('add',who,i.name,i.emoji);
+        sendBrowserNotif(fmtMsg('add',who,i.name));
+      });
+      // Item marked as bought
+      newDone.filter(id=>!oldDone.includes(id)).forEach(id=>{
+        const it=newItems.find(i=>i.id===id);
+        if(it){addNotif('buy',who,it.name,it.emoji);sendBrowserNotif(fmtMsg('buy',who,it.name));}
+      });
+
+      // Check inventory low after sync
+      checkInvThresholds();
+
+      localStorage.setItem('darna3',JSON.stringify(S));
+      renderAll();
+    }
+    setSync('☁️');
+  },()=>setSync('📴'));
+}
+
+function fmtMsg(type,who,item){
+  const tpl=(NOTIF_MSGS[S.rel]||NOTIF_MSGS.friends)[type]||'{who} {item}';
+  return tpl.replace('{who}',who).replace('{item}',item);
+}
+
+// ========== NOTIFICATIONS ==========
+function addNotif(type,who,item,emoji='📦'){
+  const icons={add:'➕',buy:'✅',low:'⚠️'};
+  const n={id:'n-'+Date.now()+Math.random(),type,msg:fmtMsg(type,who,item),emoji,ts:Date.now(),read:false};
+  S.notifications.unshift(n);
+  if(S.notifications.length>50)S.notifications=S.notifications.slice(0,50);
+  unreadNotifs++;
+  updateNotifBadge();
+  showToast((icons[type]||'🔔')+' '+n.msg);
+  try{localStorage.setItem('darna3',JSON.stringify(S));}catch(e){}
+}
+
+function updateNotifBadge(){
+  const badge=document.getElementById('notif-count-badge');
+  if(!badge)return;
+  if(unreadNotifs>0){badge.textContent=unreadNotifs;badge.style.display='flex';}
+  else badge.style.display='none';
+}
+
+function sendBrowserNotif(msg){
+  if(Notification&&Notification.permission==='granted'){
+    try{new Notification('دارنا 🏠',{body:msg,icon:'/icon.png',badge:'/icon.png',dir:'rtl',lang:'ar',tag:'darna-'+Date.now()});}catch(e){}
+  }
+}
+
+async function reqNotifPerm(){
+  if(!('Notification' in window)){showToast('متصفحك ما يدعمش الإشعارات');return;}
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){
+    showToast('✅ تم تفعيل الإشعارات!');
+    updateNotifUI();
+    sendBrowserNotif('مرحباً! الإشعارات شغالة 🎉');
+  } else {
+    showToast('⚠️ خاصك تسمح للإشعارات من إعدادات المتصفح');
+  }
+}
+
+function updateNotifUI(){
+  const perm=Notification&&Notification.permission==='granted';
+  const txt=document.getElementById('notif-status-txt');
+  const btn=document.getElementById('notif-perm-btn');
+  if(txt)txt.textContent=perm?'✅ مفعلة':'❌ غير مفعلة — اضغط فعّل';
+  if(btn)btn.style.display=perm?'none':'block';
+}
+
+function clearNotifs(){
+  S.notifications=[];unreadNotifs=0;updateNotifBadge();
+  renderNotifs();try{localStorage.setItem('darna3',JSON.stringify(S));}catch(e){}
+}
+
+// ========== INVENTORY THRESHOLD CHECK ==========
+function checkReminders(){
+  const now=Date.now();
+  S.inventory.forEach(inv=>{
+    if(inv.remindAt&&now>=inv.remindAt){
+      const key='remind-'+inv.id+'-'+inv.remindAt;
+      if(!localStorage.getItem(key)){
+        localStorage.setItem(key,'1');
+        addNotif('low','التذكير',inv.name,inv.emoji);
+        sendBrowserNotif('🛒 وقت تشري '+inv.name+' من جديد!');
+        // Schedule next reminder
+        if(inv.remindAfterDays){
+          inv.remindAt=now+inv.remindAfterDays*86400000;
+          saveS();
+        } else {
+          inv.remindAt=null;
+        }
+      }
+    }
+  });
+}
+
+function checkInvThresholds(){
+  S.inventory.forEach(inv=>{
+    if(inv.threshold!=null&&inv.qtyNow<=inv.threshold){
+      const key='inv-notif-'+inv.id;
+      const lastNotif=localStorage.getItem(key);
+      const now=Date.now();
+      if(!lastNotif||now-parseInt(lastNotif)>3600000){// max 1 notif/hour per item
+        addNotif('low','النظام',inv.name,inv.emoji);
+        sendBrowserNotif(fmtMsg('low','النظام',inv.name));
+        localStorage.setItem(key,now.toString());
+      }
+    }
+  });
+}
+
+// ========== ONBOARDING ==========
+let obStep=1;
+function goOb(s){document.getElementById('ob'+obStep).style.display='none';obStep=s;document.getElementById('ob'+s).style.display='flex';}
+function selOb(el,g){
+  el.closest('.ob-opts').querySelectorAll('.ob-opt').forEach(o=>{o.classList.remove('sel');const c=o.querySelector('.ob-chk');if(c)c.textContent='';});
+  el.classList.add('sel');const c=el.querySelector('.ob-chk');if(c)c.textContent='✓';
+  if(g==='rel'){S.rel=el.dataset.val;const msgs=NOTIF_MSGS[S.rel];document.getElementById('ob-notif-txt').textContent=msgs?msgs.add.replace('{who}','فريدة').replace('{item}','البطاطا'):'';}
+}
+function selLang(el){el.closest('.lang-grid').querySelectorAll('.lang-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');S.lang=el.dataset.val;}
+function finishOb(){
+  S.budget=parseFloat(document.getElementById('ob-budget').value)||1000;
+  S.userName=document.getElementById('ob-name').value.trim()||'أنا';
+  S.onboarded=true;
+  if(!S.inventory.length)S.inventory=[
+    {id:'i1',name:'بطاطا',emoji:'🥔',qtyNow:1,qtyMax:5,unit:'كيلو',threshold:0.5},
+    {id:'i2',name:'حليب',emoji:'🥛',qtyNow:2,qtyMax:6,unit:'لتر',threshold:1},
+    {id:'i3',name:'بيض',emoji:'🥚',qtyNow:12,qtyMax:30,unit:'قطعة',threshold:6},
+    {id:'i4',name:'عسل',emoji:'🍯',qtyNow:500,qtyMax:1000,unit:'غرام',threshold:200},
+  ];
+  saveS();
+  document.getElementById('page-ob').classList.remove('active');
+  document.getElementById('page-home').classList.add('active');
+  renderAll();
+}
+
+// ========== NAVIGATION ==========
+function navTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
+  if(p==='notifs'){unreadNotifs=0;updateNotifBadge();S.notifications.forEach(n=>n.read=true);renderNotifs();}
+  renderAll();
+}
+
+function setSync(ico){const el=document.getElementById('sync-ico');if(el)el.textContent=ico;}
+
+// ========== RENDER HOME ==========
+function renderHome(){
+  const pend=S.items.filter(i=>!i.done);
+  document.getElementById('chip-count').textContent=pend.length+' منتجات ناقصة';
+  const sp=calcSpent();
+  document.getElementById('chip-budget').textContent=sp.toFixed(0)+' درهم هذا الشهر';
+
+  // Alerts for low inventory
+  const alEl=document.getElementById('home-alerts');alEl.innerHTML='';
+  S.inventory.filter(i=>i.threshold!=null&&i.qtyNow<=i.threshold).slice(0,2).forEach(inv=>{
+    alEl.innerHTML+=`<div class="alert danger"><div class="alert-ico">⚠️</div><div style="flex:1"><p><b>${inv.emoji} ${inv.name}</b> وصل للحد الأدنى! (${inv.qtyNow} ${inv.unit})</p><div class="alert-btns"><button class="btn-y" onclick="invToList('${inv.id}')">+ للائحة</button><button class="btn-n" onclick="this.closest('.alert').remove()">لا</button></div></div></div>`;
+  });
+
+  // Items
+  const sorted=[...S.items.filter(i=>!i.done),...S.items.filter(i=>i.done)];
+  document.getElementById('list-items').innerHTML=sorted.map(it=>`
+    <div class="li ${it.done?'done':''}" id="li-${it.id}">
+      <div class="li-check" onclick="toggle('${it.id}')">${it.done?'✓':''}</div>
+      <span class="li-emoji">${it.emoji}</span>
+      <div class="li-info">
+        <div class="li-name">${it.name}</div>
+        <div class="li-detail">${it.qty} ${it.unit}${it.price?' · '+it.price+' د':''}</div>
+        <div class="li-price-row">
+          <label>الثمن:</label>
+          <input class="price-in" type="number" value="${it.price||''}" placeholder="0" onchange="setPrice('${it.id}',this.value)" onclick="event.stopPropagation()">
+          <span style="font-size:11px;color:#2d8a5e;font-weight:700">درهم</span>
+          <span class="opt-badge">اختياري</span>
+        </div>
+      </div>
+      <div class="li-right">
+        <div class="qty-row">
+          <button class="qbtn" onclick="chgQty('${it.id}',-1)">−</button>
+          <span class="qnum">${it.qty}</span>
+          <button class="qbtn" onclick="chgQty('${it.id}',1)">+</button>
+        </div>
+        <button class="del-btn" onclick="delItem('${it.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('list-empty').style.display=S.items.length?'none':'block';
+  document.getElementById('list-items').style.display=S.items.length?'block':'none';
+}
+
+// ========== RENDER INVENTORY ==========
+function pct(i){return i.qtyMax>0?Math.round(i.qtyNow/i.qtyMax*100):50;}
+function renderInv(){
+  const low=S.inventory.filter(i=>i.threshold!=null?i.qtyNow<=i.threshold:pct(i)<25);
+  const ok=S.inventory.filter(i=>i.threshold!=null?i.qtyNow>i.threshold:pct(i)>=25);
+  document.getElementById('inv-low-chip').textContent=low.length+' ناقصين';
+  document.getElementById('inv-ok-chip').textContent=ok.length+' متوفرين';
+
+  const alEl=document.getElementById('inv-alerts');
+  alEl.innerHTML=low.length?`<div class="alert danger"><div class="alert-ico">⚠️</div><div style="flex:1"><p>عندك <b>${low.length} منتجات</b> وصلات للحد الأدنى!</p></div></div>`:'';
+
+  function iHtml(inv){
+    const p=pct(inv);
+    const isLow=inv.threshold!=null?inv.qtyNow<=inv.threshold:p<25;
+    const col=isLow?'#c0613a':p<50?'#c9963a':'#2d8a5e';
+    const lbl=isLow?`⚠️ وصل للحد الأدنى — ${inv.qtyNow} ${inv.unit}`:p<50?`${p}% متبقي`:` ✓ متوفر — ${p}%`;
+    return `<div class="inv-item">
+      <div class="inv-top">
+        <span style="font-size:21px">${inv.emoji}</span>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:#1a1a2e">${inv.name}</div><div style="font-size:10px;color:#8a8a9a">${inv.qtyNow} ${inv.unit} من ${inv.qtyMax}</div></div>
+        ${isLow?`<button class="add-mini" onclick="invToList('${inv.id}')">+ للائحة</button>`:''}
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="inv-wrap">
+          <button class="qbtn" onclick="chgInv('${inv.id}',-0.5)">−</button>
+          <input class="inv-num" type="number" value="${inv.qtyNow}" step="0.5" onchange="setInv('${inv.id}',this.value)">
+          <select class="inv-unit-s" onchange="setInvUnit('${inv.id}',this.value)">
+            ${['كيلو','غرام','لتر','قطعة','علبة','قنينة'].map(u=>`<option${u===inv.unit?' selected':''}>${u}</option>`).join('')}
+          </select>
+          <button class="qbtn" onclick="chgInv('${inv.id}',0.5)">+</button>
+        </div>
+        <button class="del-btn" onclick="delInv('${inv.id}')">🗑</button>
+      </div>
+      <div class="inv-bar"><div class="inv-bar-f" style="width:${p}%;background:${col}"></div></div>
+      <div class="threshold-row">
+        <label>حد التنبيه:</label>
+        <input class="thr-in" type="number" value="${inv.threshold!=null?inv.threshold:''}" placeholder="—" step="0.5" onchange="setThreshold('${inv.id}',this.value)">
+        <span class="thr-unit">${inv.unit}</span>
+        <span style="font-size:10px;color:#8a8a9a;flex:1">← إشعار عند الوصول لهذا</span>
+      </div>
+      <div style="font-size:10px;font-weight:700;margin-top:4px;color:${col}">${lbl}</div>
+    </div>`;
+  }
+  document.getElementById('inv-low-sec').innerHTML=low.length?`<div class="stitle" style="color:#c0613a">⚠️ وصلوا للحد الأدنى</div>${low.map(iHtml).join('')}`:'';
+  document.getElementById('inv-ok-sec').innerHTML=ok.length?`<div class="stitle">متوفرين</div>${ok.map(iHtml).join('')}`:'';
+}
+
+// ========== RENDER BUDGET ==========
+function calcSpent(){
+  const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),1).getTime();
+  return S.items.filter(i=>i.done&&i.price&&i.doneAt>=start).reduce((s,i)=>s+(parseFloat(i.price)||0)*i.qty,0);
+}
+function renderBudget(){
+  const sp=calcSpent(),left=Math.max(0,S.budget-sp),pctS=S.budget>0?Math.min(100,sp/S.budget*100):0;
+  const now=new Date();
+  document.getElementById('b-month').textContent=MONTHS[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('b-bar').style.width=pctS+'%';
+  document.getElementById('b-spent').textContent=sp.toFixed(0);
+  document.getElementById('b-left').textContent=left.toFixed(0);
+  document.getElementById('b-total').textContent=S.budget;
+  document.getElementById('budget-in').value=S.budget;
+  const rec=S.items.filter(i=>i.done&&i.price).sort((a,b)=>b.doneAt-a.doneAt).slice(0,6);
+  document.getElementById('recent-list').innerHTML=rec.length
+    ?rec.map(i=>`<div class="li" style="cursor:default"><span class="li-emoji">${i.emoji}</span><div class="li-info"><div class="li-name">${i.name}</div><div class="li-detail">${i.qty} ${i.unit}</div></div><div style="font-size:14px;font-weight:800;color:#2d8a5e">${((parseFloat(i.price)||0)*i.qty).toFixed(0)} د</div></div>`).join('')
+    :'<div style="text-align:center;padding:20px;color:#8a8a9a;font-size:13px">لا توجد مشتريات مسجلة بعد</div>';
+}
+
+// ========== RENDER SHARE ==========
+function renderShare(){
+  const url=location.origin+location.pathname+'?home='+homeId;
+  document.getElementById('share-url-el').textContent=url;
+  document.getElementById('rel-lbl').textContent={couple:'💑 زوجين',family:'👨‍👩‍👧‍👦 عائلة',friends:'🤝 أصدقاء'}[S.rel]||'زوجين';
+  document.getElementById('name-display').textContent=S.userName;
+  updateNotifUI();
+}
+
+// ========== RENDER NOTIFICATIONS ==========
+function renderNotifs(){
+  const el=document.getElementById('notifs-list');
+  const emp=document.getElementById('notifs-empty');
+  const icons={add:'➕',buy:'✅',low:'⚠️'};
+  const colors={add:'#2563a8',buy:'#2d8a5e',low:'#c0613a'};
+  if(!S.notifications.length){el.innerHTML='';emp.style.display='block';return;}
+  emp.style.display='none';
+  el.innerHTML=S.notifications.map(n=>`
+    <div class="notif-log-item ${n.read?'':'new'}" style="border-color:${colors[n.type]||'#2563a8'}">
+      <div style="font-size:20px;flex-shrink:0">${icons[n.type]||'🔔'}</div>
+      <div>
+        <div class="notif-msg">${n.msg}</div>
+        <div class="notif-time">${timeAgo(n.ts)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function timeAgo(ts){
+  const diff=Date.now()-ts;
+  if(diff<60000)return 'الآن';
+  if(diff<3600000)return Math.floor(diff/60000)+' دقيقة';
+  if(diff<86400000)return Math.floor(diff/3600000)+' ساعة';
+  return Math.floor(diff/86400000)+' يوم';
+}
+
+// ========== ACTIONS ==========
+// Track pending item + reminder days
+let _pendingInvItem = null;
+let _pendingRemindDays = 7;
+
+function toggle(id){
+  const it=S.items.find(i=>i.id===id);if(!it)return;
+  it.done=!it.done;
+  it.doneAt=it.done?Date.now():null;
+
+  if(it.done){
+    const inv=S.inventory.find(i=>i.name===it.name);
+    if(inv){
+      // Already in inventory — update qty + open reminder dialog
+      inv.qtyNow=+(inv.qtyNow+it.qty).toFixed(1);
+      if(inv.qtyNow>inv.qtyMax)inv.qtyMax=inv.qtyNow;
+      showToast('📦 '+it.emoji+' '+it.name+' تحدث في المخزون ✅');
+      checkInvThresholds();
+      // Still ask for reminder timing
+      _pendingInvItem = it;
+      _pendingInvItem._invExists = true;
+      openAskInvModal(it, true);
+    } else {
+      // Not in inventory — full dialog
+      _pendingInvItem = it;
+      _pendingInvItem._invExists = false;
+      openAskInvModal(it, false);
+    }
+    fbNotifyBuy(it);
+  }
+  saveS();renderHome();
+}
+
+function openAskInvModal(it, invExists){
+  // Reset to step 1
+  document.getElementById('ask-step1').style.display='block';
+  document.getElementById('ask-step2').style.display='none';
+
+  document.getElementById('ask-inv-emoji').textContent = it.emoji;
+  document.getElementById('ask-inv-title').textContent = '✅ شريتي '+it.name+'!';
+  document.getElementById('ask-inv-sub').textContent =
+    invExists
+    ? 'تحدث المخزون تلقائياً. فاش تبغي نفكرك تشري من جديد؟'
+    : 'فاش تبغي نفكرك تشري '+it.name+' من جديد؟';
+
+  // Default reminder = 7 days
+  _pendingRemindDays = 7;
+  document.querySelectorAll('.remind-chip').forEach(c=>c.classList.remove('sel'));
+  const def=document.querySelector('.remind-chip[data-days="7"]');
+  if(def)def.classList.add('sel');
+  updateRemindPreview(7);
+
+  // Pre-fill step2
+  document.getElementById('ask-qty-now').value = it.qty;
+  document.getElementById('ask-qty-max').value = +(it.qty*3).toFixed(1);
+  const sel=document.getElementById('ask-unit');
+  for(let i=0;i<sel.options.length;i++){if(sel.options[i].text===it.unit){sel.selectedIndex=i;break;}}
+  document.getElementById('ask-threshold').value='';
+  document.getElementById('ask-thr-unit').textContent=it.unit;
+
+  // If already in inventory, hide step2 button text change
+  const nextBtn=document.querySelector('#ask-step1 .big-btn');
+  if(nextBtn){
+    nextBtn.textContent = invExists ? 'حفظ التذكير ✅' : 'التالي — إضافة للمخزون ←';
+    nextBtn.onclick = invExists ? ()=>saveReminderOnly() : ()=>goAskStep2();
+  }
+
+  document.getElementById('m-ask-inv').classList.remove('hidden');
+}
+
+function selRemind(el, days){
+  _pendingRemindDays = days;
+  document.querySelectorAll('.remind-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  updateRemindPreview(days);
+}
+
+function updateRemindPreview(days){
+  const previewTitle=document.getElementById('remind-preview-title');
+  const previewDate=document.getElementById('remind-preview-date');
+  const preview=document.getElementById('remind-preview');
+  if(!previewTitle)return;
+  if(days===0){
+    previewTitle.textContent='ما غنفكرك بهاد المنتوج';
+    previewDate.textContent='';
+    preview.style.background='#f5f5f5';
+    return;
+  }
+  preview.style.background='#f8f9fc';
+  const labels={1:'غدا',3:'بعد 3 أيام',7:'بعد أسبوع',14:'بعد أسبوعين',30:'بعد شهر'};
+  previewTitle.textContent='🔔 غيوصلك تذكير '+(labels[days]||'بعد '+days+' أيام');
+  const d=new Date(Date.now()+days*86400000);
+  const months=['يناير','فبراير','مارس','أبريل','ماي','يونيو','يوليوز','غشت','شتنبر','أكتوبر','نونبر','دجنبر'];
+  previewDate.textContent=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+}
+
+function goAskStep1(){
+  document.getElementById('ask-step1').style.display='block';
+  document.getElementById('ask-step2').style.display='none';
+}
+
+function goAskStep2(){
+  document.getElementById('ask-step1').style.display='none';
+  document.getElementById('ask-step2').style.display='block';
+}
+
+function saveReminderOnly(){
+  // Item already in inventory, just save reminder
+  if(_pendingInvItem && _pendingRemindDays > 0){
+    const inv=S.inventory.find(i=>i.name===_pendingInvItem.name);
+    if(inv){
+      inv.remindAfterDays=_pendingRemindDays;
+      inv.remindAt=Date.now()+_pendingRemindDays*86400000;
+    }
+    saveS();
+    showToast('🔔 غيوصلك تذكير بعد '+_pendingRemindDays+' أيام!');
+  }
+  _pendingInvItem=null;
+  closeM('m-ask-inv');
+}
+
+function confirmAddToInv(){
+  if(!_pendingInvItem)return;
+  const it=_pendingInvItem;
+  const qtyNow=parseFloat(document.getElementById('ask-qty-now').value)||it.qty;
+  const qtyMax=parseFloat(document.getElementById('ask-qty-max').value)||qtyNow*3;
+  const unit=document.getElementById('ask-unit').value;
+  const thr=document.getElementById('ask-threshold').value;
+
+  S.inventory.push({
+    id:'i-'+Date.now(),
+    name:it.name, emoji:it.emoji,
+    qtyNow, qtyMax, unit,
+    threshold: thr?parseFloat(thr):null,
+    remindAfterDays: _pendingRemindDays>0?_pendingRemindDays:null,
+    remindAt: _pendingRemindDays>0?Date.now()+_pendingRemindDays*86400000:null
+  });
+
+  _pendingInvItem=null;
+  saveS();
+  closeM('m-ask-inv');
+  renderInv();
+  const remindMsg=_pendingRemindDays>0?' وغيوصلك تذكير بعد '+_pendingRemindDays+' أيام 🔔':'';
+  showToast('✅ '+it.name+' تزاد للمخزون!'+remindMsg);
+}
+
+function fbNotifyBuy(item){
+  // Write to a notifications subcollection so other users see it
+  if(!db||!homeId)return;
+  db.collection('homes').doc(homeId).collection('events').add({
+    type:'buy',who:S.userName,item:item.name,emoji:item.emoji,ts:Date.now()
+  }).catch(()=>{});
+}
+
+function chgQty(id,d){const it=S.items.find(i=>i.id===id);if(!it)return;it.qty=Math.max(0.5,+(it.qty+d).toFixed(1));saveS();renderHome();}
+function setPrice(id,v){const it=S.items.find(i=>i.id===id);if(it){it.price=v;saveS();}}
+function delItem(id){S.items=S.items.filter(i=>i.id!==id);saveS();renderHome();}
+function chgInv(id,d){
+  const i=S.inventory.find(x=>x.id===id);if(!i)return;
+  i.qtyNow=Math.max(0,+(i.qtyNow+d).toFixed(1));
+  checkInvThresholds();
+  renderInv();
+}
+function setInv(id,v){
+  const i=S.inventory.find(x=>x.id===id);if(!i)return;
+  i.qtyNow=Math.max(0,parseFloat(v)||0);
+  checkInvThresholds();
+}
+function setInvUnit(id,v){const i=S.inventory.find(x=>x.id===id);if(i)i.unit=v;}
+function setThreshold(id,v){
+  const i=S.inventory.find(x=>x.id===id);if(!i)return;
+  i.threshold=v===''?null:parseFloat(v);
+}
+function delInv(id){S.inventory=S.inventory.filter(i=>i.id!==id);saveS();renderInv();}
+function saveInv(){saveS();renderInv();showToast('✅ تم حفظ المخزون');}
+function saveBudget(){S.budget=parseFloat(document.getElementById('budget-in').value)||1000;saveS();renderBudget();}
+function invToList(id){
+  const inv=S.inventory.find(i=>i.id===id);if(!inv)return;
+  if(S.items.find(i=>i.name===inv.name&&!i.done)){showToast('كاين بالفعل في اللائحة!');return;}
+  S.items.push({id:'it-'+Date.now(),name:inv.name,emoji:inv.emoji,cat:'basic',qty:1,unit:inv.unit,price:'',done:false,addedAt:Date.now(),doneAt:null});
+  saveS();navTo('home');
+}
+function copyUrl(){
+  const url=location.origin+location.pathname+'?home='+homeId;
+  navigator.clipboard.writeText(url).then(()=>showToast('✅ تم نسخ الرابط!')).catch(()=>prompt('انسخ الرابط:',url));
+}
+function shareWA(){
+  const url=location.origin+location.pathname+'?home='+homeId;
+  window.open('https://wa.me/?text='+encodeURIComponent('🏠 *دارنا*\n\nافتح الرابط باش تشوف لائحة المشتريات 👇\n'+url));
+}
+function editName(){
+  const n=prompt('دخل اسمك:',S.userName);
+  if(n&&n.trim()){S.userName=n.trim();saveS();renderShare();}
+}
+function resetApp(){if(confirm('واش متأكد؟')){localStorage.clear();location.reload();}}
+
+// ========== MODALS ==========
+function openAdd(){
+  document.getElementById('cat-picker').innerHTML=CATS.map(c=>`<div class="cat-c${c.id===selCat?' sel':''}" onclick="pickCat('${c.id}',this)"><span class="cat-c-ico">${c.e}</span><span class="cat-c-lbl">${c.n}</span></div>`).join('');
+  ['a-name','a-qty','a-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('a-qty').value=1;
+  document.getElementById('m-add').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('a-name').focus(),200);
+}
+function pickCat(id,el){selCat=id;document.querySelectorAll('.cat-c').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function addItem(){
+  const name=document.getElementById('a-name').value.trim();
+  if(!name){showToast('دخل اسم المنتوج');return;}
+  const cat=CATS.find(c=>c.id===selCat)||CATS[7];
+  const newItem={id:'it-'+Date.now(),name,cat:selCat,emoji:cat.e,
+    qty:parseFloat(document.getElementById('a-qty').value)||1,
+    unit:document.getElementById('a-unit').value,
+    price:document.getElementById('a-price').value,
+    done:false,addedAt:Date.now(),doneAt:null,addedBy:S.userName};
+  S.items.push(newItem);
+  saveS();closeM('m-add');renderHome();
+  showToast('✅ '+name+' تزاد للائحة');
+}
+function openAddInv(){
+  ['i-name','i-now','i-max','i-threshold'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('m-inv').classList.remove('hidden');
+}
+function addInvItem(){
+  const name=document.getElementById('i-name').value.trim();
+  if(!name){showToast('دخل اسم المنتوج');return;}
+  const now=parseFloat(document.getElementById('i-now').value)||0;
+  const max=parseFloat(document.getElementById('i-max').value)||now*2||10;
+  const thr=document.getElementById('i-threshold').value;
+  S.inventory.push({
+    id:'i-'+Date.now(),name,emoji:'📦',
+    qtyNow:now,qtyMax:max,
+    unit:document.getElementById('i-unit').value,
+    threshold:thr?parseFloat(thr):null
+  });
+  saveS();closeM('m-inv');renderInv();showToast('✅ '+name+' تزاد للمخزون');
+}
+function closeM(id){document.getElementById(id).classList.add('hidden');}
+document.querySelectorAll('.modal-overlay').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.add('hidden');}));
+
+// ========== TOAST ==========
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.style.opacity='0',2800);
+}
+
+// ========== RENDER ALL ==========
+function renderAll(){
+  const a=document.querySelector('.page.active');if(!a)return;
+  const id=a.id;
+  if(id==='page-home')renderHome();
+  else if(id==='page-inv')renderInv();
+  else if(id==='page-budget')renderBudget();
+  else if(id==='page-share')renderShare();
+  else if(id==='page-notifs')renderNotifs();
+}
+
+// ========== INIT ==========
+loadS();
+initHomeId();
+unreadNotifs=S.notifications?S.notifications.filter(n=>!n.read).length:0;
+updateNotifBadge();
+
+if(S.onboarded){
+  document.getElementById('page-ob').classList.remove('active');
+  document.getElementById('page-home').classList.add('active');
+  renderAll();
+}
+
+// Firebase
+fbLoad().then(()=>{
+  fbListen();setSync('☁️');
+  // Listen to events subcollection for real-time notifications
+  if(db&&homeId){
+    const cutoff=Date.now()-5000;
+    db.collection('homes').doc(homeId).collection('events')
+      .where('ts','>',cutoff)
+      .onSnapshot(snap=>{
+        snap.docChanges().forEach(change=>{
+          if(change.type==='added'){
+            const d=change.doc.data();
+            if(d.who!==S.userName){
+              addNotif(d.type,d.who,d.item,d.emoji||'📦');
+            }
+          }
+        });
+      });
+  }
+}).catch(()=>setSync('📴'));
+
+// Check thresholds every 10 min
+setInterval(()=>{checkInvThresholds();checkReminders();},60000);
+checkReminders(); // Check on load too
+</script>
+
+</body>
+</html>
